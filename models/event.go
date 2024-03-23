@@ -17,6 +17,20 @@ type Event struct {
 
 var events = []Event{}
 
+func GetEventById(id int64) (*Event, error) {
+	query := "SELECT * FROM events WHERE id = ?"
+	row := db.DB.QueryRow(query, id)
+	var event Event
+
+	err := row.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &event, err
+}
+
 func (e Event) Save() error {
 	insert := `INSERT INTO events (name, description, location, dateTime, user_id) VALUES (?, ?, ?, ?, ?) `
 
