@@ -8,6 +8,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func updateEvent(ctx *gin.Context) {
+	eventID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "could not parse the id"})
+	}
+
+	_, err = models.GetEventById(eventID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch the id"})
+		return
+	}
+
+	var updatedEvent models.Event
+	err = ctx.ShouldBindJSON(&updatedEvent)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data"})
+		return
+	}
+
+	updatedEvent.ID = eventID
+	err = updatedEvent.Update()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not update event"})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Event succeses to update"})
+}
+
 func getEvent(ctx *gin.Context) {
 	eventID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
