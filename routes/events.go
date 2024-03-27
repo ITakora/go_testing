@@ -8,6 +8,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func deleteEvent(ctx *gin.Context) {
+	eventID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "could not parse the id"})
+	}
+
+	event, err := models.GetEventById(eventID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch the id"})
+		return
+	}
+	err = event.Delete()
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not delete the event"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Event succesed to deleted"})
+
+}
+
 func updateEvent(ctx *gin.Context) {
 	eventID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
