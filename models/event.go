@@ -61,7 +61,7 @@ func GetEventById(id int64) (*Event, error) {
 	return &event, err
 }
 
-func (e Event) Save() error {
+func (e *Event) Save() error {
 	insert := `INSERT INTO events (name, description, location, dateTime, user_id) VALUES (?, ?, ?, ?, ?) `
 
 	stmt, err := db.DB.Prepare(insert)
