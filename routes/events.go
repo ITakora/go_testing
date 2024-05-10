@@ -116,5 +116,5 @@ func createEvents(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not connect to database :("})
 		return
 	}
-	ctx.JSON(http.StatusCreated, gin.H{"message": "Event Created", "event": event})
+	ctx.JSON(http.StatusCreated, gin.H{"event": event, "message": "Event Created"})
 }

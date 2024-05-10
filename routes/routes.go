@@ -12,6 +12,8 @@ func Route(route *gin.Engine) {
 	authenticated.POST("/events", createEvents)
 	authenticated.PUT("events/:id", updateEvent)
 	authenticated.DELETE("events/:id", deleteEvent)
+	authenticated.POST("events/:id/register", createRegisterEvent)
+	authenticated.DELETE("events/:id/register", deleteRegisterEvent)
 
 	route.GET("/events", getEvents)
 	route.GET("/events/:id", getEvent)
